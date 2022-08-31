@@ -3,16 +3,47 @@ import Header from "./Header";
 import Main from "./Main";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import React from "react";
 //import "./App.css";
 
-function App() {
+function App(props) {
+  const [isEditAvatarOpen, setIsEditAvatarOpen] = React.useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = React.useState(false);
+  const [isAddPlaceOpen, setIsAddPlaceOpen] = React.useState(false);
+
+  function handleEditAvatarClick() {
+    setIsEditAvatarOpen(true);
+  }
+
+  function handleEditProfileClick() {
+    setIsEditProfileOpen(true);
+  }
+
+  function handleAddPlaceClick() {
+    setIsAddPlaceOpen(true);
+  }
+
+  function closeAllPopups() {
+    console.log("close");
+    setIsEditAvatarOpen(false);
+    setIsEditProfileOpen(false);
+    setIsAddPlaceOpen(false);
+  }
+
   return (
     <>
       <div className="page">
         <Header />
-        <Main />
+        <Main
+          onEditProfileClick={handleEditProfileClick}
+          onAddPlaceClick={handleAddPlaceClick}
+          onEditAvatarClick={handleEditAvatarClick}
+          isEditProfilePopupOpen={false} /** ??? */
+          isAddPlacePopupOpen={false} /** ??? */
+          isEditAvatarPopupOpen={false} /** ??? */
+        />
         <Footer />
-        <PopupWithForm name="create-card" title="New place">
+        <PopupWithForm name="create-card" title="New place" isOpen={isAddPlaceOpen} onClose={closeAllPopups}>
           <input
             id="popup_title"
             type="text"
@@ -26,7 +57,7 @@ function App() {
           <input id="popup_link" class="popup__input" placeholder="Image link" type="url" required />
           <div id="popup_link_error" class="popup__input-error"></div>
         </PopupWithForm>
-        <PopupWithForm name="edit-profile" title="Edit profile">
+        <PopupWithForm name="edit-profile" title="Edit profile" isOpen={isEditProfileOpen} onClose={closeAllPopups}>
           <input
             id="popup_name"
             type="text"
@@ -49,12 +80,17 @@ function App() {
             value="Explorer"
           />
         </PopupWithForm>
-        <PopupWithForm name="edit-avatar" title="Update profile picture">
+        <PopupWithForm
+          name="edit-avatar"
+          title="Update profile picture"
+          isOpen={isEditAvatarOpen}
+          onClose={closeAllPopups}
+        >
           <input id="popup_avatar_link" className="popup__input" placeholder="Avatar link" type="url" required />
           <div id="popup_avatar_link_error" className="popup__input-error"></div>
         </PopupWithForm>
-        <PopupWithForm name="edit-avatar" title="Are you sure?"></PopupWithForm>
-        <ImagePopup></ImagePopup>
+        <PopupWithForm name="edit-avatar" title="Are you sure?" isOpen={false}></PopupWithForm>
+        <ImagePopup isOpen={false}></ImagePopup>
 
         <div className="popup popup_type_edit-profile">
           <div className="popup__container popup__container_type_edit-profile">
