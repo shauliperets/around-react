@@ -24,7 +24,7 @@ function App(props) {
   }
 
   function closeAllPopups() {
-    console.log("close");
+    //console.log("close");
     setIsEditAvatarOpen(false);
     setIsEditProfileOpen(false);
     setIsAddPlaceOpen(false);
