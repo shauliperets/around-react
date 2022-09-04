@@ -31,12 +31,27 @@ function App(props) {
     setSelectedCard(event.target);
   };
 
-  const handleLikeClick = () => {
-    /*React.useEffect(() => {
-      api.addRemoveLike().then((result) => {
-        //console.log("cards =>", result);
-        //setCards(result);
-      });
+  const handleCreateCardSubmit = (event) => {
+    event.preventDefault();
+    console.log("create card clicked...");
+    /*api.addCard("name", "link").then((result) => {
+      console.log(result);
+    });*/
+  };
+
+  const handleEditProfileSubmit = (event) => {
+    event.preventDefault();
+    console.log("edit profile clicked...");
+    /*api.addCard("name", "link").then((result) => {
+      console.log(result);
+    });*/
+  };
+
+  const handleEditAvatarSubmit = (event) => {
+    event.preventDefault();
+    console.log("edit avatar clicked...");
+    /*api.addCard("name", "link").then((result) => {
+      console.log(result);
     });*/
   };
 
@@ -65,7 +80,13 @@ function App(props) {
 
         <Footer />
 
-        <PopupWithForm name="create-card" title="New place" isOpen={isAddPlaceOpen} onClose={closeAllPopups}>
+        <PopupWithForm
+          name="create-card"
+          handleSubmit={handleCreateCardSubmit}
+          title="New place"
+          isOpen={isAddPlaceOpen}
+          onClose={closeAllPopups}
+        >
           <input
             id="popup_title"
             type="text"
@@ -80,7 +101,13 @@ function App(props) {
           <div id="popup_link_error" className="popup__input-error"></div>
         </PopupWithForm>
 
-        <PopupWithForm name="edit-profile" title="Edit profile" isOpen={isEditProfileOpen} onClose={closeAllPopups}>
+        <PopupWithForm
+          name="edit-profile"
+          handleSubmit={handleEditProfileSubmit}
+          title="Edit profile"
+          isOpen={isEditProfileOpen}
+          onClose={closeAllPopups}
+        >
           <input
             id="popup_name"
             type="text"
@@ -106,6 +133,7 @@ function App(props) {
 
         <PopupWithForm
           name="edit-avatar"
+          handleSubmit={handleEditAvatarSubmit}
           title="Update profile picture"
           isOpen={isEditAvatarOpen}
           onClose={closeAllPopups}
