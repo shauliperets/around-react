@@ -48,15 +48,16 @@ class Api {
     }).then((result) => this._checkResponse(result));
   }
 
-  addRemoveLike(id, isAdd) {
-    if (isAdd) {
+  addRemoveLike(id, isliked) {
+    console.log("api like -- id: ", id, "isLiked: ", isliked);
+    if (isliked) {
       return fetch(`${this._baseUrl}/cards/likes/${id}`, {
-        method: "PUT",
+        method: "DELETE",
         headers: this._headers,
       }).then((result) => this._checkResponse(result));
     } else {
       return fetch(`${this._baseUrl}/cards/likes/${id}`, {
-        method: "DELETE",
+        method: "PUT",
         headers: this._headers,
       }).then((result) => this._checkResponse(result));
     }
