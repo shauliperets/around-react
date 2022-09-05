@@ -49,7 +49,6 @@ class Api {
   }
 
   addRemoveLike(id, isliked) {
-    console.log("api like -- id: ", id, "isLikedh: ", isliked);
     if (isliked) {
       return fetch(`${this._baseUrl}/cards/likes/${id}`, {
         method: "DELETE",

@@ -1,11 +1,8 @@
-//import logoImage from "../images/logo.svg";
 import editButton from "../images/edit-button.svg";
-//import { api } from "../utils/api";
 import React from "react";
 import whiteHeartIcon from "../images/heart.svg";
 import blackHeartIcon from "../images/heart-black.svg";
 import binIcon from "../images/delete-icon.svg";
-//import { UserInfo } from "../utils/UserInfo";
 
 function Main(props) {
   React.useEffect(() => {}, [props.cards]);

@@ -11,7 +11,7 @@ function App(props) {
   const [userName, setUserName] = React.useState("");
   const [userDescription, setUserDescription] = React.useState("");
   const [userAvatar, setUserAvatar] = React.useState("");
-  const [cards, setCards] = React.useState([]); //need to save as card object
+  const [cards, setCards] = React.useState([]);
   const [isEditAvatarOpen, setIsEditAvatarOpen] = React.useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = React.useState(false);
   const [isAddPlaceOpen, setIsAddPlaceOpen] = React.useState(false);
@@ -61,12 +61,9 @@ function App(props) {
   };
 
   function handleDeleteCard(event) {
-    console.log("card delete ==>>>>", event.target.parentNode.parentNode.getAttribute("card_id"));
     const cardId = event.target.parentNode.parentNode.getAttribute("card_id");
     api.deleteCard(cardId).then((result) => {
       console.log("delete result", result);
-
-      //const array = cards.filter(isEquel);
 
       const array = cards.filter((card) => {
         return card._id != cardId;
@@ -76,14 +73,8 @@ function App(props) {
     });
   }
 
-  /*function isEquel(card) {
-    console.log("card._id =>", card._id, "props.cardId =>", cardId);
-    if (card._id == props.cardId) return true;
-  }*/
-
   const handleCreateCardSubmit = (event) => {
     event.preventDefault();
-    console.log("create card clicked...");
 
     setPopupCreateCardButton("Saving...");
 
@@ -105,14 +96,14 @@ function App(props) {
   const handleLikeClick = (event) => {
     const cardId = event.target.parentNode.parentNode.parentNode.parentNode.getAttribute("card_id");
 
-    const card = getCardById(cardId, props.cards);
+    const card = getCardById(cardId);
 
-    api.addRemoveLike(cardId, isLiked(card, props.userId)).then((result) => {
-      setCardLikes(props.cards, card, result);
+    api.addRemoveLike(cardId, isLiked(card, userId)).then((result) => {
+      setCardLikes(card, result);
     });
   };
 
-  function setCardLikes(cards, card, result) {
+  function setCardLikes(card, result) {
     const array = cards.map((item) => {
       if (item._id == card._id) {
         return result;
@@ -139,7 +130,7 @@ function App(props) {
     return result;
   }
 
-  function getCardById(cardId, cards) {
+  function getCardById(cardId) {
     let result = {};
     cards.forEach((card) => {
       if (card._id == cardId) {
@@ -152,9 +143,6 @@ function App(props) {
 
   const handleEditProfileSubmit = (event) => {
     event.preventDefault();
-    console.log("edit profile clicked...");
-    console.log("profile name =>", profileName);
-    console.log("profile about =>", profileAbout);
 
     setPopupProfileButton("Saving...");
 
@@ -171,7 +159,6 @@ function App(props) {
         console.log("An error occurred: ", error);
       })
       .finally(() => {
-        //profilePopup.setButtonText("Save");
         setPopupProfileButton("Save");
       });
   };
@@ -194,13 +181,8 @@ function App(props) {
         console.log("An error occurred: ", error);
       })
       .finally(() => {
-        //profilePopup.setButtonText("Save");
         setPopupEditAvatarButton("Save");
       });
-
-    /*api.addCard("name", "link").then((result) => {
-      console.log(result);
-    });*/
   };
 
   function closeAllPopups() {
@@ -248,9 +230,6 @@ function App(props) {
           cards={cards}
           handleLikeClick={handleLikeClick}
           isLiked={isLiked}
-          isEditProfilePopupOpen={false} /** ??? */
-          isAddPlacePopupOpen={false} /** ??? */
-          isEditAvatarPopupOpen={false} /** ??? */
         />
 
         <Footer />
