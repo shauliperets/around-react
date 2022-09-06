@@ -5,8 +5,10 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import React from "react";
 import { api } from "../utils/api";
+import { FormValidator } from "../utils/FormValidator";
+import { settings } from "../utils/settings";
 
-function App(props) {
+function App() {
   const [userId, setUserId] = React.useState("");
   const [userName, setUserName] = React.useState("");
   const [userDescription, setUserDescription] = React.useState("");
@@ -212,6 +214,24 @@ function App(props) {
     setProfileAvatar(event.target.value);
   }
 
+  const formValidators = {};
+
+  function enableValidation() {
+    const forms = Array.from(document.querySelectorAll(settings.formSelector));
+
+    forms.forEach(function (form) {
+      const validator = new FormValidator(settings, form);
+
+      const formName = form.getAttribute("name");
+
+      formValidators[formName] = validator;
+
+      validator.enableValidation();
+    });
+  }
+
+  enableValidation();
+
   return (
     <>
       <div className="page">
@@ -295,6 +315,7 @@ function App(props) {
             value={profileAbout}
             onChange={(event) => updateProfileAbout(event)}
           />
+          <div id="popup_about_me_error" className="popup__input-error"></div>
         </PopupWithForm>
 
         <PopupWithForm
