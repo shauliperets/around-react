@@ -7,7 +7,7 @@ class Api {
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
   setUserInfo(username, userJob) {
@@ -18,7 +18,7 @@ class Api {
         name: username,
         about: userJob,
       }),
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
   setProfileImage(avatar) {
@@ -28,13 +28,13 @@ class Api {
       body: JSON.stringify({
         avatar: avatar,
       }),
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
   addCard(name, link) {
@@ -45,7 +45,7 @@ class Api {
         name: name,
         link: link,
       }),
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
   addRemoveLike(id, isliked) {
@@ -53,12 +53,12 @@ class Api {
       return fetch(`${this._baseUrl}/cards/likes/${id}`, {
         method: "DELETE",
         headers: this._headers,
-      }).then((result) => this._checkResponse(result));
+      }).then((response) => this._checkResponse(response));
     } else {
       return fetch(`${this._baseUrl}/cards/likes/${id}`, {
         method: "PUT",
         headers: this._headers,
-      }).then((result) => this._checkResponse(result));
+      }).then((response) => this._checkResponse(response));
     }
   }
 
@@ -66,13 +66,13 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then((result) => this._checkResponse(result));
+    }).then((response) => this._checkResponse(response));
   }
 
-  _checkResponse(result) {
-    if (result.ok) return result.json();
+  _checkResponse(response) {
+    if (response.ok) return response.json();
 
-    return Promise.reject(`Error: ${result.status}`);
+    return Promise.reject(`Error: ${response.status}`);
   }
 }
 
