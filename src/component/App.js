@@ -24,12 +24,7 @@ function App() {
   const [profileName, setProfileName] = React.useState("");
   const [profileAbout, setProfileAbout] = React.useState("");
   const [profileAvatar, setProfileAvatar] = React.useState("");
-
   const [isLoading, setIsLoading] = React.useState(false);
-
-  //const [popupProfileButton, setPopupProfileButton] = React.useState("Save");
-  //const [popupCreateCardButton, setPopupCreateCardButton] = React.useState("Create");
-  //const [popupEditAvatarButton, setPopupEditAvatarButton] = React.useState("Save");
 
   React.useEffect(() => {
     api
@@ -50,7 +45,6 @@ function App() {
     api
       .getInitialCards()
       .then((response) => {
-        //console.log("cards =>", response);
         setCards(response);
       })
       .catch((error) => {
@@ -78,13 +72,6 @@ function App() {
   function handleDeleteCard(event) {
     const cardId = event.target.parentNode.parentNode.getAttribute("card_id");
     api.deleteCard(cardId).then(() => {
-      //console.log("delete result", result);
-
-      /*const updateCards = cards.filter((card) => {
-        return card._id !== cardId;
-      });
-
-      setCards(updateCards);*/
       setCards((state) => state.filter((card) => card._id !== cardId));
     });
   }
@@ -92,7 +79,6 @@ function App() {
   const handleCreateCardSubmit = (event) => {
     event.preventDefault();
 
-    //setPopupCreateCardButton("Saving...");
     setIsLoading(true);
 
     api
@@ -106,16 +92,11 @@ function App() {
         console.log("An error occurred: ", error);
       })
       .finally(() => {
-        //setPopupCreateCardButton("Save");
         setIsLoading(false);
       });
   };
 
   const handleLikeClick = (card) => {
-    //const cardId = event.target.parentNode.parentNode.parentNode.parentNode.getAttribute("card_id");
-
-    //const card = getCardById(cardId);
-
     api.addRemoveLike(card._id, isLiked(card, userId)).then((response) => {
       setCardLikes(card, response);
     });
@@ -162,14 +143,11 @@ function App() {
   const handleEditProfileSubmit = (event) => {
     event.preventDefault();
 
-    //setPopupProfileButton("Saving...");
     setIsLoading(true);
 
     api
       .setUserInfo(profileName, profileAbout)
       .then((response) => {
-        //console.log("Profile changed", response);
-
         setUserName(response.name);
         setUserDescription(response.about);
         closeAllPopups();
@@ -178,17 +156,12 @@ function App() {
         console.log("An error occurred: ", error);
       })
       .finally(() => {
-        //setPopupProfileButton("Save");
         setIsLoading(false);
       });
   };
 
   const handleEditAvatarSubmit = (event) => {
     event.preventDefault();
-    //console.log("edit avatar clicked...");
-    //console.log("profile avatar =>", profileAvatar);
-
-    //setPopupEditAvatarButton("Saving...");
     setIsLoading(true);
 
     api
@@ -202,7 +175,6 @@ function App() {
         console.log("An error occurred: ", error);
       })
       .finally(() => {
-        //setPopupEditAvatarButton("Save");
         setIsLoading(false);
       });
   };

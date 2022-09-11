@@ -1,25 +1,8 @@
 import editButton from "../images/edit-button.svg";
 import React from "react";
 import Cards from "./Cards";
-//import whiteHeartIcon from "../images/heart.svg";
-//import blackHeartIcon from "../images/heart-black.svg";
-//import binIcon from "../images/delete-icon.svg";
 
 function Main(props) {
-  //React.useEffect(() => {}, [props.cards]);
-
-  /*function isOwned(ownerId) {
-    if (props.userId == ownerId) {
-      return true;
-    }
-
-    return false;
-  }*/
-
-  /*function isOwned(ownerId) {
-    return props.userId === ownerId;
-  }*/
-
   return (
     <>
       <main>
