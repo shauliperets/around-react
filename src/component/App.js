@@ -37,6 +37,8 @@ function App() {
 
         setProfileName(response.name);
         setProfileAbout(response.about);
+
+        enableValidation();
       })
       .catch((error) => {
         console.log("An error occurred: ", error);
@@ -69,12 +71,11 @@ function App() {
     setSelectedCard(event.target);
   };
 
-  function handleDeleteCard(event) {
-    const cardId = event.target.parentNode.parentNode.getAttribute("card_id");
+  const handleDeleteCard = (cardId) => {
     api.deleteCard(cardId).then(() => {
-      setCards((state) => state.filter((card) => card._id !== cardId));
+      setCards((state) => state.filter((item) => item._id !== cardId));
     });
-  }
+  };
 
   const handleCreateCardSubmit = (event) => {
     event.preventDefault();
@@ -84,8 +85,8 @@ function App() {
     api
       .addCard(createCardTitle, createCardLink)
       .then((response) => {
-        cards.unshift(response);
-        setCards(cards);
+        const updateCards = addCardToCards(cards, response);
+        setCards(updateCards);
         closeAllPopups();
       })
       .catch((error) => {
@@ -96,8 +97,13 @@ function App() {
       });
   };
 
+  function addCardToCards(cards, card) {
+    cards.unshift(card);
+    return cards;
+  }
+
   const handleLikeClick = (card) => {
-    api.addRemoveLike(card._id, isLiked(card, userId)).then((response) => {
+    api.addRemoveLike(card._id, isLiked(card.likes, userId)).then((response) => {
       setCardLikes(card, response);
     });
   };
@@ -114,28 +120,17 @@ function App() {
     setCards(array);
   }
 
-  function isLiked(card, userId) {
+  function isLiked(likes, userId) {
     let result = false;
     let likesIds = [];
 
-    card.likes.forEach((like) => {
+    likes.forEach((like) => {
       likesIds.push(like._id);
     });
 
     if (likesIds.includes(userId)) {
       result = true;
     }
-
-    return result;
-  }
-
-  function getCardById(cardId) {
-    let result = {};
-    cards.forEach((card) => {
-      if (card._id == cardId) {
-        result = card;
-      }
-    });
 
     return result;
   }
@@ -167,7 +162,6 @@ function App() {
     api
       .setProfileImage(profileAvatar)
       .then((response) => {
-        console.log("Profile changed", response);
         setUserAvatar(response.avatar);
         closeAllPopups();
       })
@@ -222,7 +216,7 @@ function App() {
     });
   }
 
-  enableValidation();
+  //enableValidation();
 
   return (
     <div className="page">
