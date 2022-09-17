@@ -1,6 +1,6 @@
 import editButton from "../images/edit-button.svg";
 import React from "react";
-import Cards from "./Cards";
+import Card from "./Card";
 
 function Main(props) {
   return (
@@ -23,14 +23,22 @@ function Main(props) {
       </section>
 
       <section className="elements">
-        <Cards
-          data={props.cards}
-          userId={props.userId}
-          handleDeleteCard={props.handleDeleteCard}
-          onCardClick={props.onCardClick}
-          handleLikeClick={props.handleLikeClick}
-          isLiked={props.isLiked}
-        />
+        {props.cards.map((card) => (
+          <Card
+            key={card._id}
+            data={card}
+            id={card._id}
+            ownerId={card.owner._id}
+            title={card.name}
+            link={card.link}
+            likes={card.likes}
+            userId={props.userId}
+            handleDeleteCard={props.handleDeleteCard}
+            onCardClick={props.onCardClick}
+            handleLikeClick={props.handleLikeClick}
+            isLiked={props.isLiked}
+          />
+        ))}
       </section>
     </main>
   );
