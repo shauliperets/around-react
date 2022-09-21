@@ -1,10 +1,38 @@
 import editButton from "../images/edit-button.svg";
 import React from "react";
 import Card from "./Card";
+import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
+
+  const handleLikeClick = (card) => {
+    api.addRemoveLike(card._id, isLiked(card.likes, currentUser._id)).then((response) => {
+      props.setCardLikes(card, response);
+    });
+  };
+
+  function isLiked(likes, userId) {
+    let result = false;
+    let likesIds = [];
+
+    likes.forEach((like) => {
+      likesIds.push(like._id);
+    });
+
+    if (likesIds.includes(userId)) {
+      result = true;
+    }
+
+    return result;
+  }
+
+  const handleDeleteCard = (cardId) => {
+    api.deleteCard(cardId).then(() => {
+      props.setCards((state) => state.filter((item) => item._id !== cardId));
+    });
+  };
 
   return (
     <main>
@@ -36,10 +64,10 @@ function Main(props) {
             link={card.link}
             likes={card.likes}
             userId={props.userId}
-            handleDeleteCard={props.handleDeleteCard}
+            onDeleteCard={handleDeleteCard}
             onCardClick={props.onCardClick}
-            handleLikeClick={props.handleLikeClick}
-            isLiked={props.isLiked}
+            onLikeClick={handleLikeClick}
+            isLiked={isLiked}
           />
         ))}
       </section>

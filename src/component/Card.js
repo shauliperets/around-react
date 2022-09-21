@@ -17,7 +17,7 @@ function Card(props) {
         className={isOwned(props.ownerId) ? "card__delete-button card__delete-button_active" : "card__delete-button"}
         type="button"
         onClick={() => {
-          props.handleDeleteCard(props.id);
+          props.onDeleteCard(props.id);
         }}
       >
         <img src={binIcon} alt="" />
@@ -30,7 +30,7 @@ function Card(props) {
             className="card__like-button"
             type="button"
             onClick={() => {
-              props.handleLikeClick(props.data);
+              props.onLikeClick(props.data);
             }}
           >
             <img

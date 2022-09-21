@@ -30,7 +30,7 @@ function App() {
 
   React.useEffect(() => {
     api
-      .getUserInfo() //<---- delete it
+      .getUserInfo() //<---- need to delete it
       .then((response) => {
         console.log("user response =>", response);
         setUserId(response._id);
@@ -76,11 +76,11 @@ function App() {
     setSelectedCard(event.target);
   };
 
-  const handleDeleteCard = (cardId) => {
+  /*const handleDeleteCard = (cardId) => {
     api.deleteCard(cardId).then(() => {
       setCards((state) => state.filter((item) => item._id !== cardId));
     });
-  };
+  };*/
 
   const handleCreateCardSubmit = (event) => {
     event.preventDefault();
@@ -107,12 +107,6 @@ function App() {
     return cards;
   }
 
-  const handleLikeClick = (card) => {
-    api.addRemoveLike(card._id, isLiked(card.likes, userId)).then((response) => {
-      setCardLikes(card, response);
-    });
-  };
-
   function setCardLikes(card, response) {
     const array = cards.map((item) => {
       if (item._id == card._id) {
@@ -123,21 +117,6 @@ function App() {
     });
 
     setCards(array);
-  }
-
-  function isLiked(likes, userId) {
-    let result = false;
-    let likesIds = [];
-
-    likes.forEach((like) => {
-      likesIds.push(like._id);
-    });
-
-    if (likesIds.includes(userId)) {
-      result = true;
-    }
-
-    return result;
   }
 
   const handleEditProfileSubmit = (event) => {
@@ -231,14 +210,17 @@ function App() {
           onAddPlaceClick={handleAddPlaceClick}
           onEditAvatarClick={handleEditAvatarClick}
           onCardClick={handleCardClick}
-          handleDeleteCard={handleDeleteCard}
-          userId={userId}
+          //handleDeleteCard={handleDeleteCard}
+          //userId={userId}
+          cards={cards}
+          setCardLikes={setCardLikes}
+          setCards={setCards}
           //userName={userName}
           //userDescription={userDescription}
           //userAvatar={userAvatar}
-          cards={cards}
-          handleLikeClick={handleLikeClick}
-          isLiked={isLiked}
+
+          //handleLikeClick={handleLikeClick}
+          //isLiked={isLiked}
         />
 
         <Footer />
