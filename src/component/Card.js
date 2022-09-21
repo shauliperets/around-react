@@ -1,10 +1,14 @@
+import React from "react";
 import whiteHeartIcon from "../images/heart.svg";
 import blackHeartIcon from "../images/heart-black.svg";
 import binIcon from "../images/delete-icon.svg";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card(props) {
+  const currentUser = React.useContext(CurrentUserContext);
+
   function isOwned(ownerId) {
-    return props.userId === ownerId;
+    return currentUser._id === ownerId;
   }
 
   return (
@@ -30,7 +34,7 @@ function Card(props) {
             }}
           >
             <img
-              src={props.isLiked(props.likes, props.userId) ? blackHeartIcon : whiteHeartIcon}
+              src={props.isLiked(props.likes, currentUser._id) ? blackHeartIcon : whiteHeartIcon}
               className="card__icon"
               alt="Heart icon"
             />

@@ -7,12 +7,13 @@ import React from "react";
 import { api } from "../utils/api";
 import { FormValidator } from "../utils/FormValidator";
 import { settings } from "../utils/settings";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
   const [userId, setUserId] = React.useState("");
-  const [userName, setUserName] = React.useState("");
-  const [userDescription, setUserDescription] = React.useState("");
-  const [userAvatar, setUserAvatar] = React.useState("");
+  //const [userName, setUserName] = React.useState("");
+  //const [userDescription, setUserDescription] = React.useState("");
+  //const [userAvatar, setUserAvatar] = React.useState("");
   const [cards, setCards] = React.useState([]);
   const [isEditAvatarOpen, setIsEditAvatarOpen] = React.useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = React.useState(false);
@@ -25,18 +26,22 @@ function App() {
   const [profileAbout, setProfileAbout] = React.useState("");
   const [profileAvatar, setProfileAvatar] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({});
 
   React.useEffect(() => {
     api
-      .getUserInfo()
+      .getUserInfo() //<---- delete it
       .then((response) => {
+        console.log("user response =>", response);
         setUserId(response._id);
-        setUserName(response.name);
-        setUserDescription(response.about);
-        setUserAvatar(response.avatar);
+        //setUserName(response.name);
+        //setUserDescription(response.about);
+        //setUserAvatar(response.avatar);
 
         setProfileName(response.name);
         setProfileAbout(response.about);
+
+        setCurrentUser(response);
 
         enableValidation();
       })
@@ -143,8 +148,8 @@ function App() {
     api
       .setUserInfo(profileName, profileAbout)
       .then((response) => {
-        setUserName(response.name);
-        setUserDescription(response.about);
+        //setUserName(response.name);
+        //setUserDescription(response.about);
         closeAllPopups();
       })
       .catch((error) => {
@@ -162,7 +167,7 @@ function App() {
     api
       .setProfileImage(profileAvatar)
       .then((response) => {
-        setUserAvatar(response.avatar);
+        //setUserAvatar(response.avatar);
         closeAllPopups();
       })
       .catch((error) => {
@@ -216,113 +221,113 @@ function App() {
     });
   }
 
-  //enableValidation();
-
   return (
     <div className="page">
-      <Header />
+      <CurrentUserContext.Provider value={currentUser}>
+        <Header />
 
-      <Main
-        onEditProfileClick={handleEditProfileClick}
-        onAddPlaceClick={handleAddPlaceClick}
-        onEditAvatarClick={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-        handleDeleteCard={handleDeleteCard}
-        userId={userId}
-        userName={userName}
-        userDescription={userDescription}
-        userAvatar={userAvatar}
-        cards={cards}
-        handleLikeClick={handleLikeClick}
-        isLiked={isLiked}
-      />
-
-      <Footer />
-
-      <PopupWithForm
-        name="create-card"
-        handleSubmit={handleCreateCardSubmit}
-        title="New place"
-        isOpen={isAddPlaceOpen}
-        onClose={closeAllPopups}
-        button={isLoading ? "Saving..." : "Save"}
-      >
-        <input
-          id="popup_title"
-          type="text"
-          className="popup__input"
-          placeholder="Title"
-          required
-          minLength="1"
-          maxLength="30"
-          onChange={(event) => updateTitleCard(event)}
+        <Main
+          onEditProfileClick={handleEditProfileClick}
+          onAddPlaceClick={handleAddPlaceClick}
+          onEditAvatarClick={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+          handleDeleteCard={handleDeleteCard}
+          userId={userId}
+          //userName={userName}
+          //userDescription={userDescription}
+          //userAvatar={userAvatar}
+          cards={cards}
+          handleLikeClick={handleLikeClick}
+          isLiked={isLiked}
         />
-        <div id="popup_title_error" className="popup__input-error"></div>
-        <input
-          id="popup_link"
-          className="popup__input"
-          placeholder="Image link"
-          type="url"
-          onChange={(event) => updateLinkCard(event)}
-          required
-        />
-        <div id="popup_link_error" className="popup__input-error"></div>
-      </PopupWithForm>
 
-      <PopupWithForm
-        name="edit-profile"
-        handleSubmit={handleEditProfileSubmit}
-        title="Edit profile"
-        isOpen={isEditProfileOpen}
-        onClose={closeAllPopups}
-        button={isLoading ? "Saving..." : "Save"}
-      >
-        <input
-          id="popup_name"
-          type="text"
-          className="popup__input"
-          placeholder="Name"
-          required
-          minLength="2"
-          maxLength="40"
-          value={profileName}
-          onChange={(event) => updateProfileName(event)}
-        />
-        <div id="popup_name_error" className="popup__input-error"></div>
-        <input
-          id="popup_about_me"
-          type="text"
-          className="popup__input"
-          placeholder="About me"
-          required
-          minLength="2"
-          maxLength="200"
-          value={profileAbout}
-          onChange={(event) => updateProfileAbout(event)}
-        />
-        <div id="popup_about_me_error" className="popup__input-error"></div>
-      </PopupWithForm>
+        <Footer />
 
-      <PopupWithForm
-        name="edit-avatar"
-        handleSubmit={handleEditAvatarSubmit}
-        title="Update profile picture"
-        isOpen={isEditAvatarOpen}
-        onClose={closeAllPopups}
-        button={isLoading ? "Saving..." : "Save"}
-      >
-        <input
-          id="popup_avatar_link"
-          className="popup__input"
-          placeholder="Avatar link"
-          type="url"
-          onChange={(event) => updateProfileAvatar(event)}
-          required
-        />
-        <div id="popup_avatar_link_error" className="popup__input-error"></div>
-      </PopupWithForm>
+        <PopupWithForm
+          name="create-card"
+          handleSubmit={handleCreateCardSubmit}
+          title="New place"
+          isOpen={isAddPlaceOpen}
+          onClose={closeAllPopups}
+          button={isLoading ? "Saving..." : "Save"}
+        >
+          <input
+            id="popup_title"
+            type="text"
+            className="popup__input"
+            placeholder="Title"
+            required
+            minLength="1"
+            maxLength="30"
+            onChange={(event) => updateTitleCard(event)}
+          />
+          <div id="popup_title_error" className="popup__input-error"></div>
+          <input
+            id="popup_link"
+            className="popup__input"
+            placeholder="Image link"
+            type="url"
+            onChange={(event) => updateLinkCard(event)}
+            required
+          />
+          <div id="popup_link_error" className="popup__input-error"></div>
+        </PopupWithForm>
 
-      <ImagePopup isOpen={isImagePopupOpen} card={selectedCard} onClose={closeAllPopups}></ImagePopup>
+        <PopupWithForm
+          name="edit-profile"
+          handleSubmit={handleEditProfileSubmit}
+          title="Edit profile"
+          isOpen={isEditProfileOpen}
+          onClose={closeAllPopups}
+          button={isLoading ? "Saving..." : "Save"}
+        >
+          <input
+            id="popup_name"
+            type="text"
+            className="popup__input"
+            placeholder="Name"
+            required
+            minLength="2"
+            maxLength="40"
+            value={profileName}
+            onChange={(event) => updateProfileName(event)}
+          />
+          <div id="popup_name_error" className="popup__input-error"></div>
+          <input
+            id="popup_about_me"
+            type="text"
+            className="popup__input"
+            placeholder="About me"
+            required
+            minLength="2"
+            maxLength="200"
+            value={profileAbout}
+            onChange={(event) => updateProfileAbout(event)}
+          />
+          <div id="popup_about_me_error" className="popup__input-error"></div>
+        </PopupWithForm>
+
+        <PopupWithForm
+          name="edit-avatar"
+          handleSubmit={handleEditAvatarSubmit}
+          title="Update profile picture"
+          isOpen={isEditAvatarOpen}
+          onClose={closeAllPopups}
+          button={isLoading ? "Saving..." : "Save"}
+        >
+          <input
+            id="popup_avatar_link"
+            className="popup__input"
+            placeholder="Avatar link"
+            type="url"
+            onChange={(event) => updateProfileAvatar(event)}
+            required
+          />
+          <div id="popup_avatar_link_error" className="popup__input-error"></div>
+        </PopupWithForm>
+
+        <ImagePopup isOpen={isImagePopupOpen} card={selectedCard} onClose={closeAllPopups}></ImagePopup>
+      </CurrentUserContext.Provider>
     </div>
   );
 }
