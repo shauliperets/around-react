@@ -2,6 +2,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
 import PopupWithForm from "./PopupWithForm";
+import EditProfilePopup from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
 import React from "react";
 import { api } from "../utils/api";
@@ -10,7 +11,7 @@ import { settings } from "../utils/settings";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
-  const [userId, setUserId] = React.useState("");
+  //const [userId, setUserId] = React.useState("");
   //const [userName, setUserName] = React.useState("");
   //const [userDescription, setUserDescription] = React.useState("");
   //const [userAvatar, setUserAvatar] = React.useState("");
@@ -22,8 +23,8 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [createCardTitle, setCreateCardTitle] = React.useState("");
   const [createCardLink, setCreateCardLink] = React.useState("");
-  const [profileName, setProfileName] = React.useState("");
-  const [profileAbout, setProfileAbout] = React.useState("");
+  //const [profileName, setProfileName] = React.useState("");
+  //const [profileAbout, setProfileAbout] = React.useState("");
   const [profileAvatar, setProfileAvatar] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
@@ -33,13 +34,13 @@ function App() {
       .getUserInfo() //<---- need to delete it
       .then((response) => {
         console.log("user response =>", response);
-        setUserId(response._id);
+        //setUserId(response._id);
         //setUserName(response.name);
         //setUserDescription(response.about);
         //setUserAvatar(response.avatar);
 
-        setProfileName(response.name);
-        setProfileAbout(response.about);
+        //setProfileName(response.name);
+        //setProfileAbout(response.about);
 
         setCurrentUser(response);
 
@@ -119,13 +120,16 @@ function App() {
     setCards(array);
   }
 
-  const handleEditProfileSubmit = (event) => {
-    event.preventDefault();
+  const handleEditProfileSubmit = (data) => {
+    //console.log("data=>", data[0].props.value);
+    //event.preventDefault();
+    currentUser.name = data[0].props.value;
+    currentUser.about = data[2].props.value;
 
     setIsLoading(true);
 
     api
-      .setUserInfo(profileName, profileAbout)
+      .setUserInfo(currentUser.name /*data[0].props.value*/, currentUser.about /*data[2].props.value*/) //  pass data from inputs
       .then((response) => {
         //setUserName(response.name);
         //setUserDescription(response.about);
@@ -172,13 +176,20 @@ function App() {
     setCreateCardLink(event.target.value);
   }
 
+  /*
   function updateProfileName(event) {
-    setProfileName(event.target.value);
+    //setProfileName(event.target.value);
+    console.log("event=>", event.target.value);
+
+    currentUser.name = event.target.value;
+    console.log("currentUser=>", currentUser);
+    setCurrentUser(currentUser);
   }
 
   function updateProfileAbout(event) {
-    setProfileAbout(event.target.value);
-  }
+    //setProfileAbout(event.target.value);
+    currentUser.about = event.target.value;
+  }*/
 
   function updateProfileAvatar(event) {
     setProfileAvatar(event.target.value);
@@ -255,39 +266,18 @@ function App() {
           <div id="popup_link_error" className="popup__input-error"></div>
         </PopupWithForm>
 
-        <PopupWithForm
-          name="edit-profile"
-          handleSubmit={handleEditProfileSubmit}
-          title="Edit profile"
+        <EditProfilePopup
           isOpen={isEditProfileOpen}
           onClose={closeAllPopups}
+          onSubmit={handleEditProfileSubmit}
           button={isLoading ? "Saving..." : "Save"}
-        >
-          <input
-            id="popup_name"
-            type="text"
-            className="popup__input"
-            placeholder="Name"
-            required
-            minLength="2"
-            maxLength="40"
-            value={profileName}
-            onChange={(event) => updateProfileName(event)}
-          />
-          <div id="popup_name_error" className="popup__input-error"></div>
-          <input
-            id="popup_about_me"
-            type="text"
-            className="popup__input"
-            placeholder="About me"
-            required
-            minLength="2"
-            maxLength="200"
-            value={profileAbout}
-            onChange={(event) => updateProfileAbout(event)}
-          />
-          <div id="popup_about_me_error" className="popup__input-error"></div>
-        </PopupWithForm>
+          handleSubmit={handleEditProfileSubmit}
+          //currentUser={currentUser}
+          //setCurrentUser={setCurrentUser}
+
+          //updateProfileName={updateProfileName}
+          //updateProfileAbout={updateProfileAbout}
+        ></EditProfilePopup>
 
         <PopupWithForm
           name="edit-avatar"
