@@ -3,6 +3,7 @@ import Header from "./Header";
 import Main from "./Main";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
 import React from "react";
 import { api } from "../utils/api";
@@ -25,13 +26,13 @@ function App() {
   const [createCardLink, setCreateCardLink] = React.useState("");
   //const [profileName, setProfileName] = React.useState("");
   //const [profileAbout, setProfileAbout] = React.useState("");
-  const [profileAvatar, setProfileAvatar] = React.useState("");
+  //const [profileAvatar, setProfileAvatar] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
 
   React.useEffect(() => {
     api
-      .getUserInfo() //<---- need to delete it
+      .getUserInfo()
       .then((response) => {
         console.log("user response =>", response);
         //setUserId(response._id);
@@ -143,12 +144,18 @@ function App() {
       });
   };
 
-  const handleEditAvatarSubmit = (event) => {
-    event.preventDefault();
+  const handleEditAvatarSubmit = (data) => {
+    //event.preventDefault();
+    console.log("data from avatar =>", data);
+    console.log("data from avatar ref =>", data[0].ref);
+    console.log("data from avatar ref.value.current =>", data[0].ref.current);
+    console.log("data from avatar ref.value.current.value =>", data[0].ref.current.value);
+    currentUser.avatar = data[0].ref.current.value; //<--- add data from componenet
+    //console.log("avatar data[0].props =>", data[0].props.value);
     setIsLoading(true);
 
     api
-      .setProfileImage(profileAvatar)
+      .setProfileImage(currentUser.avatar)
       .then((response) => {
         //setUserAvatar(response.avatar);
         closeAllPopups();
@@ -191,9 +198,10 @@ function App() {
     currentUser.about = event.target.value;
   }*/
 
+  /*
   function updateProfileAvatar(event) {
     setProfileAvatar(event.target.value);
-  }
+  }*/
 
   const formValidators = {};
 
@@ -271,7 +279,6 @@ function App() {
           onClose={closeAllPopups}
           onSubmit={handleEditProfileSubmit}
           button={isLoading ? "Saving..." : "Save"}
-          handleSubmit={handleEditProfileSubmit}
           //currentUser={currentUser}
           //setCurrentUser={setCurrentUser}
 
@@ -279,24 +286,12 @@ function App() {
           //updateProfileAbout={updateProfileAbout}
         ></EditProfilePopup>
 
-        <PopupWithForm
-          name="edit-avatar"
-          handleSubmit={handleEditAvatarSubmit}
-          title="Update profile picture"
+        <EditAvatarPopup
           isOpen={isEditAvatarOpen}
           onClose={closeAllPopups}
           button={isLoading ? "Saving..." : "Save"}
-        >
-          <input
-            id="popup_avatar_link"
-            className="popup__input"
-            placeholder="Avatar link"
-            type="url"
-            onChange={(event) => updateProfileAvatar(event)}
-            required
-          />
-          <div id="popup_avatar_link_error" className="popup__input-error"></div>
-        </PopupWithForm>
+          onSubmit={handleEditAvatarSubmit}
+        ></EditAvatarPopup>
 
         <ImagePopup isOpen={isImagePopupOpen} card={selectedCard} onClose={closeAllPopups}></ImagePopup>
       </CurrentUserContext.Provider>
