@@ -7,33 +7,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
-  const handleLikeClick = (card) => {
-    api.addRemoveLike(card._id, isLiked(card.likes, currentUser._id)).then((response) => {
-      props.setCardLikes(card, response);
-    });
-  };
-
-  function isLiked(likes, userId) {
-    let result = false;
-    let likesIds = [];
-
-    likes.forEach((like) => {
-      likesIds.push(like._id);
-    });
-
-    if (likesIds.includes(userId)) {
-      result = true;
-    }
-
-    return result;
-  }
-
-  const handleDeleteCard = (cardId) => {
-    api.deleteCard(cardId).then(() => {
-      props.setCards((state) => state.filter((item) => item._id !== cardId));
-    });
-  };
-
   return (
     <main>
       <section className="profile">
@@ -64,10 +37,10 @@ function Main(props) {
             link={card.link}
             likes={card.likes}
             userId={props.userId}
-            onDeleteCard={handleDeleteCard}
+            onDeleteCard={props.onCardDelete}
             onCardClick={props.onCardClick}
-            onLikeClick={handleLikeClick}
-            isLiked={isLiked}
+            onLikeClick={props.onCardLike}
+            isLiked={props.isLiked}
           />
         ))}
       </section>
