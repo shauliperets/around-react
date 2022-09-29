@@ -10,7 +10,7 @@ import { api } from "../utils/api";
 import { FormValidator } from "../utils/FormValidator";
 import { settings } from "../utils/settings";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-
+//
 function App() {
   const [cards, setCards] = React.useState([]);
   const [isEditAvatarOpen, setIsEditAvatarOpen] = React.useState(false);
