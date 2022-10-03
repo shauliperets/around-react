@@ -13,28 +13,24 @@ function EditProfilePopup(props) {
     setAbout(currentUser.about);
   }, [currentUser]);
 
-  //const [userDescription, setUserDescription] = React.useState("");
-
   function updateProfileName(event) {
-    //setProfileName(event.target.value);
-    //console.log("event=>", event.target.value);
-
-    //currentUser.name = event.target.value;
-    //console.log("currentUser=>", currentUser);
-    //setCurrentUser(currentUser);
     setName(event.target.value);
   }
 
   function updateProfileAbout(event) {
-    //setProfileAbout(event.target.value);
-    //currentUser.about = event.target.value;
     setAbout(event.target.value);
   }
 
   return (
     <PopupWithForm
       name="edit-profile"
-      handleSubmit={props.onSubmit}
+      //handleSubmit={props.onSubmit}
+      handleSubmit={
+        /*props.onSubmit*/ (event) => {
+          event.preventDefault();
+          props.onSubmit(name, about);
+        }
+      }
       title="Edit profile"
       isOpen={props.isOpen}
       onClose={props.onClose}

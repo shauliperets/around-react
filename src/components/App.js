@@ -25,8 +25,6 @@ function App() {
     api
       .getUserInfo()
       .then((response) => {
-        console.log("user response =>", response);
-
         setCurrentUser(response);
 
         enableValidation();
@@ -62,9 +60,9 @@ function App() {
     setSelectedCard(event.target);
   };
 
-  const handleCreateCardSubmit = (data) => {
-    const title = data[0].props.value;
-    const link = data[2].props.value;
+  const handleCreateCardSubmit = (title, link) => {
+    //const title = data[0].props.value;
+    //const link = data[2].props.value;
 
     setIsLoading(true);
 
@@ -82,32 +80,33 @@ function App() {
       });
   };
 
-  function addCardToCards(cards, card) {
-    cards.unshift(card);
-    return cards;
-  }
-
   function setCardLikes(card, response) {
-    const array = cards.map((item) => {
-      if (item._id == card._id) {
+    const updateCards = cards.map((item) => {
+      if (item._id === card._id) {
         return response;
       } else {
         return item;
       }
     });
 
-    setCards(array);
+    setCards(updateCards);
   }
 
-  const handleEditProfileSubmit = (data) => {
-    currentUser.name = data[0].props.value;
-    currentUser.about = data[2].props.value;
+  const handleEditProfileSubmit = (/*data*/ name, about) => {
+    //currentUser.name = data[0].props.value;
+    //currentUser.about = data[2].props.value;
+
+    currentUser.name = name;
+    currentUser.about = about;
+    setCurrentUser(currentUser);
+
+    //console.log(`x=${x}, y=${y}`);
 
     setIsLoading(true);
 
     api
       .setUserInfo(currentUser.name, currentUser.about)
-      .then((response) => {
+      .then(() => {
         closeAllPopups();
       })
       .catch((error) => {
@@ -118,8 +117,13 @@ function App() {
       });
   };
 
-  const handleEditAvatarSubmit = (data) => {
-    currentUser.avatar = data[0].ref.current.value;
+  const handleEditAvatarSubmit = (avatar) => {
+    //currentUser.avatar = data[0].ref.current.value;
+    //console.log("avatar =>", avatar);
+    currentUser.avatar = avatar;
+
+    setCurrentUser(currentUser);
+
     setIsLoading(true);
 
     api
@@ -143,9 +147,14 @@ function App() {
   }
 
   const handleLikeClick = (card) => {
-    api.addRemoveLike(card._id, isLiked(card.likes, currentUser._id)).then((response) => {
-      setCardLikes(card, response);
-    });
+    api
+      .addRemoveLike(card._id, isLiked(card.likes, currentUser._id))
+      .then((response) => {
+        setCardLikes(card, response);
+      })
+      .catch((error) => {
+        console.log("An error occurred: ", error);
+      });
   };
 
   function isLiked(likes, userId) {
@@ -164,9 +173,14 @@ function App() {
   }
 
   const handleDeleteCard = (cardId) => {
-    api.deleteCard(cardId).then(() => {
-      setCards((state) => state.filter((item) => item._id !== cardId));
-    });
+    api
+      .deleteCard(cardId)
+      .then(() => {
+        setCards((state) => state.filter((item) => item._id !== cardId));
+      })
+      .catch((error) => {
+        console.log("An error occurred: ", error);
+      });
   };
 
   const formValidators = {};

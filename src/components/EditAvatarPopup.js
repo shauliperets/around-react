@@ -1,14 +1,22 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function EditAvatarPopup(props) {
   const avatarRef = React.useRef();
 
+  React.useEffect(() => {
+    avatarRef.current.value = "";
+  }, [props.isOpen]);
+
   return (
     <PopupWithForm
       name="edit-avatar"
-      handleSubmit={props.onSubmit}
+      //handleSubmit={props.onSubmit}
+      handleSubmit={(event) => {
+        event.preventDefault();
+        props.onSubmit(avatarRef.current.value);
+        //props.onSubmit(avatarRef);
+      }}
       title="Update profile picture"
       isOpen={props.isOpen}
       onClose={props.onClose}
