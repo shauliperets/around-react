@@ -24,13 +24,10 @@ function EditProfilePopup(props) {
   return (
     <PopupWithForm
       name="edit-profile"
-      //handleSubmit={props.onSubmit}
-      handleSubmit={
-        /*props.onSubmit*/ (event) => {
-          event.preventDefault();
-          props.onSubmit(name, about);
-        }
-      }
+      handleSubmit={(event) => {
+        event.preventDefault();
+        props.onSubmit(name, about);
+      }}
       title="Edit profile"
       isOpen={props.isOpen}
       onClose={props.onClose}

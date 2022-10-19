@@ -1,4 +1,4 @@
-/* Refactoring needed */
+/* Refactoring needed - see notes file */
 export class FormValidator {
   constructor(settings, formElement) {
     this._settings = settings;

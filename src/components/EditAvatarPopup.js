@@ -11,11 +11,9 @@ function EditAvatarPopup(props) {
   return (
     <PopupWithForm
       name="edit-avatar"
-      //handleSubmit={props.onSubmit}
       handleSubmit={(event) => {
         event.preventDefault();
         props.onSubmit(avatarRef.current.value);
-        //props.onSubmit(avatarRef);
       }}
       title="Update profile picture"
       isOpen={props.isOpen}

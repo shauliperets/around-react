@@ -61,9 +61,6 @@ function App() {
   };
 
   const handleCreateCardSubmit = (title, link) => {
-    //const title = data[0].props.value;
-    //const link = data[2].props.value;
-
     setIsLoading(true);
 
     api
@@ -92,15 +89,10 @@ function App() {
     setCards(updateCards);
   }
 
-  const handleEditProfileSubmit = (/*data*/ name, about) => {
-    //currentUser.name = data[0].props.value;
-    //currentUser.about = data[2].props.value;
-
+  const handleEditProfileSubmit = (name, about) => {
     currentUser.name = name;
     currentUser.about = about;
     setCurrentUser(currentUser);
-
-    //console.log(`x=${x}, y=${y}`);
 
     setIsLoading(true);
 
@@ -118,17 +110,16 @@ function App() {
   };
 
   const handleEditAvatarSubmit = (avatar) => {
-    //currentUser.avatar = data[0].ref.current.value;
-    //console.log("avatar =>", avatar);
-    currentUser.avatar = avatar;
+    //currentUser.avatar = avatar;
 
-    setCurrentUser(currentUser);
+    //setCurrentUser(currentUser);
 
     setIsLoading(true);
 
     api
-      .setProfileImage(currentUser.avatar)
+      .setProfileImage(avatar)
       .then((response) => {
+        setCurrentUser({ ...currentUser, avatar: response?.avatar });
         closeAllPopups();
       })
       .catch((error) => {

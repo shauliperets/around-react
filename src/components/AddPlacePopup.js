@@ -21,13 +21,10 @@ function AddPlacePopup(props) {
   return (
     <PopupWithForm
       name="create-card"
-      //handleSubmit={props.onSubmit}
-      handleSubmit={
-        /*props.onSubmit*/ (event) => {
-          event.preventDefault();
-          props.onSubmit(title, link);
-        }
-      }
+      handleSubmit={(event) => {
+        event.preventDefault();
+        props.onSubmit(title, link);
+      }}
       title="New place"
       isOpen={props.isOpen}
       onClose={props.onClose}
